@@ -2,41 +2,21 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
+const {Delete, Get, Post, Put} = require("./controller/controller");
 
-let db = []
 
 app.use(bodyParser.json());
 
 app.use(cors({ origin: ["http://localhost:3000"] }));
 
-app.get("/pokemon", (req, res) => {
-  res.send(db)
-});
+app.get("/pokemon", Get);
 
-app.post("/pokemon", (req, res) => {
-  db.push(req.body)
-  res.sendStatus(200)
-})
+app.post("/pokemon", Post)
 
-app.put("/pokemon:id", (req, res) => {
-  const id = req.params.id;
+app.put("/pokemon:id", Put)
 
-  const foundId = db.find((item) => item.id === id)
+app.delete("/pokemon/:id", Delete)
 
-  const index = db.find((item) => item.id === id)
-
-  const copy = {...foundId}
-
-  db.splice(index, 1, copy)
-
-  res.send(copy)
-})
-
-app.delete("/pokemon/:id", (req, res) => {
-  const index = db.findIndex((item) => item.id === req.params.id)
-  db.splice(index, 1)
-  res.send("Pokemon Deleted")
-})
 
 
 
